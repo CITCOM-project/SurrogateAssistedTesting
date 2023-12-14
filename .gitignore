@@ -1,0 +1,6 @@
+*.csv
+*.txt
+*openaps_temp*
+*.zip
+__pycache__
+.vscode
