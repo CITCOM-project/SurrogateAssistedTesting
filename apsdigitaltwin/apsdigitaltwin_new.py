@@ -24,7 +24,22 @@ class APSDigitalTwinSimulator(Simulator):
         self.profile_path = profile_path
         self.output_file = output_file
 
+    def is_valid(self, configuration):
+        min_bg = 200
+        model_control = Model([configuration["start_cob"], 0, 0, configuration["start_bg"], configuration["start_iob"]], self.constants)
+        for t in range(1, 121):
+            model_control.update(t)
+            min_bg = min(min_bg, model_control.history[-1][g_label])
+
+            if min_bg < 50:
+                return False
+
+        return True
+
     def run_with_config(self, configuration) -> SimulationResult:
+        if not self.is_valid(configuration):
+            return SimulationResult(None, False, None)
+
         min_bg = 200
         max_bg = 0
         end_bg = 0
@@ -37,7 +52,7 @@ class APSDigitalTwinSimulator(Simulator):
         model_openaps = Model([configuration["start_cob"], 0, 0, configuration["start_bg"], configuration["start_iob"]], self.constants)
         for t in range(1, 121):
             if t % 5 == 1:
-                rate = open_aps.run(model_openaps.history, output_file=self.output_file)
+                rate = open_aps.run(model_openaps.history, output_file=self.output_file, faulty=False)
                 # if rate == -1:
                 #     violation = True
                 open_aps_output += rate
@@ -73,7 +88,7 @@ def main(file):
     np.random.seed(123)
 
     search_bias = Input("search_bias", float, hidden=True)
-    
+
     start_bg = Input("start_bg", float)
     start_cob = Input("start_cob", float)
     start_iob = Input("start_iob", float)
@@ -81,8 +96,8 @@ def main(file):
     hyper = Output("hyper", float)
 
     constraints = {
-        start_bg >= 70, start_bg <= 180, 
-        start_cob >= 100, start_cob <= 300, 
+        start_bg >= 70, start_bg <= 180,
+        start_cob >= 100, start_cob <= 300,
         start_iob >= 0, start_iob <= 150
     }
 
@@ -124,20 +139,20 @@ def main(file):
     test_case = CausalSurrogateAssistedTestCase(specification, ga_search, simulator)
 
     res, iter, df = test_case.execute(data_collector)
-    with open(f"./outputs_ensemble/{file.replace('./datasets/', '')}.txt", "w") as out:
+    with open(f"./outputs_2_ensemble/{file.replace('./datasets/', '')}.txt", "w") as out:
         out.write(str(res) + "\n" + str(iter))
-    df.to_csv(f"./outputs_ensemble/{file.replace('./datasets/', '')}_full.csv")
+    df.to_csv(f"./outputs_2_ensemble/{file.replace('./datasets/', '')}_full.csv")
 
     print(f"finished {file}")
 
 if __name__ == "__main__":
     load_dotenv()
 
-    all_finished = os.listdir("./outputs_ensemble")
+    all_finished = os.listdir("./outputs_2_ensemble")
 
     all_traces = os.listdir("./datasets")
     while len(all_traces) > 0:
-        num = 1
+        num = 930
         if num > len(all_traces):
             num = len(all_traces)
 

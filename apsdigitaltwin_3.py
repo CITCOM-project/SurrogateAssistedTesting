@@ -3,8 +3,9 @@ from causal_testing.specification.causal_dag import CausalDAG
 from causal_testing.specification.causal_specification import CausalSpecification
 from causal_testing.specification.scenario import Scenario
 from causal_testing.specification.variable import Input, Output
-from causal_testing.surrogate.causal_surrogate_assisted import CausalSurrogateAssistedTestCase, SimulationResult, Simulator
+from util.causal_surrogate_assisted_3 import CausalSurrogateAssistedTestCase, SimulationResult, Simulator
 from causal_testing.surrogate.surrogate_search_algorithms import GeneticSearchAlgorithm
+from util.surrogate_search_algorithms_new import GeneticEnembleSearchAlgorithm
 from util.model import Model, OpenAPS, i_label, g_label, s_label
 
 import pandas as pd
@@ -126,6 +127,7 @@ def main(file):
     }
 
     ga_search = GeneticSearchAlgorithm(config=ga_config)
+    ga_search_ensemble = GeneticEnembleSearchAlgorithm(config=ga_config)
 
     constants = []
     const_file_name = file.replace("datasets", "constants").replace("_np_random_random_nonfaulty_scenarios", ".txt")
@@ -136,12 +138,12 @@ def main(file):
 
     simulator = APSDigitalTwinSimulator(constants, "./util/profile.json", f"./{file}_openaps_temp")
     data_collector = ObservationalDataCollector(scenario, pd.read_csv(f"./{file}.csv"))
-    test_case = CausalSurrogateAssistedTestCase(specification, ga_search, simulator)
+    test_case = CausalSurrogateAssistedTestCase(specification, ga_search, ga_search_ensemble, simulator)
 
     res, iter, df = test_case.execute(data_collector)
-    with open(f"./outputs_2/{file.replace('./datasets/', '')}.txt", "w") as out:
+    with open(f"./outputs_3/{file.replace('./datasets/', '')}.txt", "w") as out:
         out.write(str(res) + "\n" + str(iter))
-    df.to_csv(f"./outputs_2/{file.replace('./datasets/', '')}_full.csv")
+    df.to_csv(f"./outputs_3/{file.replace('./datasets/', '')}_full.csv")
 
     print(f"finished {file}")
 
