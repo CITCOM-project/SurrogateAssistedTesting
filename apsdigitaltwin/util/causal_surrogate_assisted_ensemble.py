@@ -75,9 +75,9 @@ class CausalSurrogateAssistedTestCase:
             else:
                 data_collector.data = data_collector.data.append(test_result.data, ignore_index=True)
 
-            if test_result.fault:
-                test_result.relationship = ""
-                return test_result, i + 1, data_collector.data
+            # if test_result.fault:
+            #     test_result.relationship = ""
+            #     return test_result, i + 1, data_collector.data
 
 
         print("No fault found")

@@ -3,7 +3,7 @@ from causal_testing.specification.causal_dag import CausalDAG
 from causal_testing.specification.causal_specification import CausalSpecification
 from causal_testing.specification.scenario import Scenario
 from causal_testing.specification.variable import Input, Output
-from util.causal_surrogate_assisted_new import CausalSurrogateAssistedTestCase, SimulationResult, Simulator
+from apsdigitaltwin.util.causal_surrogate_assisted_ensemble import CausalSurrogateAssistedTestCase, SimulationResult, Simulator
 from util.surrogate_search_algorithms_new import GeneticEnembleSearchAlgorithm
 from util.model import Model, OpenAPS, i_label, g_label, s_label
 
@@ -148,6 +148,10 @@ def main(file):
 if __name__ == "__main__":
     load_dotenv()
 
+    valid = open("ensemble", "r")
+    valid_traces = valid.read.split(",")
+    valid.close()
+
     all_finished = os.listdir("./outputs_2_ensemble")
 
     all_traces = os.listdir("./datasets")
@@ -160,7 +164,7 @@ if __name__ == "__main__":
             pool_vals = []
             while len(pool_vals) < num and len(all_traces) > 0:
                 data_trace = all_traces.pop()
-                if data_trace.endswith(".csv"):
+                if data_trace.endswith(".csv") and data_trace in valid:
                     if len(pd.read_csv(os.path.join("./datasets", data_trace))) >= 300:
                         if data_trace[:-4] + ".txt" not in all_finished:
                             pool_vals.append(f"./datasets/{data_trace[:-4]}")
