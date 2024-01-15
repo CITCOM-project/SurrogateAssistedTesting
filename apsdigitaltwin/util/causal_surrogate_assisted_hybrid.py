@@ -60,6 +60,9 @@ class CausalSurrogateAssistedTestCase:
     ):
         data_collector.collect_data()
 
+        res = None
+        iter = 0
+
         for i in range(max_executions):
             candidate_test_case = None
             if i % 2 == 0:
@@ -89,10 +92,17 @@ class CausalSurrogateAssistedTestCase:
             # if test_result.fault:
             #     test_result.relationship = ""
             #     return test_result, i + 1, data_collector.data
+                
+            if test_result.fault and res is None:
+                res = test_result
+                iter = i + 1
 
+        if res == None:
+            res = "No fault found"
+            iter = 200
 
-        print("No fault found")
-        return "No fault found", i + 1, data_collector.data
+        print(res)
+        return res, iter, data_collector.data
 
     def generate_surrogates(
         self, specification: CausalSpecification, data_collector: ObservationalDataCollector

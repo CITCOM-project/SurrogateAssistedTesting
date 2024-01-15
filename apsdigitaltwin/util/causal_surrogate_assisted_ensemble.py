@@ -58,6 +58,9 @@ class CausalSurrogateAssistedTestCase:
     ):
         data_collector.collect_data()
 
+        res = None
+        iter = 0
+
         for i in range(max_executions):
             surrogate_model = self.search_algorithm.generate_ensemble(data_collector.data)
             fitness_functions = self.search_algorithm.generate_fitness_functions(surrogate_model)
@@ -78,7 +81,14 @@ class CausalSurrogateAssistedTestCase:
             # if test_result.fault:
             #     test_result.relationship = ""
             #     return test_result, i + 1, data_collector.data
+                
+            if test_result.fault and res is None:
+                res = test_result
+                iter = i + 1
 
+        if res == None:
+            res = "No fault found"
+            iter = 200
 
-        print("No fault found")
-        return "No fault found", i + 1, data_collector.data
+        print(res)
+        return res, iter, data_collector.data
