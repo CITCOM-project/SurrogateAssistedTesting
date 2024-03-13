@@ -1,0 +1,6 @@
+digraph APS_DAG {
+    rankdir=LR;
+
+    "Search\nBias" -> "Scenario\nInputs"[style="dashed"];
+    "Scenario\nInputs" -> "ADS\nViolations"[style="dotted"];
+}

@@ -1,0 +1,132 @@
+digraph APS_DAG {
+    rankdir=LR;
+
+    "search_bias" -> "road_type";
+    "search_bias" -> "road_id";
+    "search_bias" -> "scenario_length";
+    "search_bias" -> "vehicle_front";
+    "search_bias" -> "vehicle_adjacent";
+    "search_bias" -> "vehicle_opposite";
+    "search_bias" -> "vehicle_front_two_wheeled";
+    "search_bias" -> "vehicle_adjacent_two_wheeled";
+    "search_bias" -> "vehicle_opposite_two_wheeled";
+    "search_bias" -> "time";
+    "search_bias" -> "weather";
+    "search_bias" -> "pedestrian_density";
+    "search_bias" -> "target_speed";
+    "search_bias" -> "trees";
+    "search_bias" -> "buildings";
+    "search_bias" -> "task";
+
+    "road_type" -> "follow_center" [included=1, expected=no_effect];
+    "road_type" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "road_type" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "road_type" -> "avoid_static" [included=1, expected=no_effect];
+    "road_type" -> "abide_rules" [included=1, expected=no_effect];
+    "road_type" -> "reach_destination" [included=1, expected=no_effect];
+
+    "road_id" -> "follow_center" [included=1, expected=no_effect];
+    "road_id" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "road_id" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "road_id" -> "avoid_static" [included=1, expected=no_effect];
+    "road_id" -> "abide_rules" [included=1, expected=no_effect];
+    "road_id" -> "reach_destination" [included=1, expected=no_effect];
+
+    "scenario_length" -> "follow_center" [included=1, expected=no_effect];
+    "scenario_length" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "scenario_length" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "scenario_length" -> "avoid_static" [included=1, expected=no_effect];
+    "scenario_length" -> "abide_rules" [included=1, expected=no_effect];
+    "scenario_length" -> "reach_destination" [included=1, expected=no_effect];
+
+    "vehicle_front" -> "follow_center" [included=1, expected=no_effect];
+    "vehicle_front" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "vehicle_front" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "vehicle_front" -> "avoid_static" [included=1, expected=no_effect];
+    "vehicle_front" -> "abide_rules" [included=1, expected=no_effect];
+    "vehicle_front" -> "reach_destination" [included=1, expected=no_effect];
+
+    "vehicle_adjacent" -> "follow_center" [included=1, expected=no_effect];
+    "vehicle_adjacent" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "vehicle_adjacent" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "vehicle_adjacent" -> "avoid_static" [included=1, expected=no_effect];
+    "vehicle_adjacent" -> "abide_rules" [included=1, expected=no_effect];
+    "vehicle_adjacent" -> "reach_destination" [included=1, expected=no_effect];
+
+    "vehicle_opposite" -> "follow_center" [included=1, expected=no_effect];
+    "vehicle_opposite" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "vehicle_opposite" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "vehicle_opposite" -> "avoid_static" [included=1, expected=no_effect];
+    "vehicle_opposite" -> "abide_rules" [included=1, expected=no_effect];
+    "vehicle_opposite" -> "reach_destination" [included=1, expected=no_effect];
+
+    "vehicle_front_two_wheeled" -> "follow_center" [included=1, expected=no_effect];
+    "vehicle_front_two_wheeled" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "vehicle_front_two_wheeled" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "vehicle_front_two_wheeled" -> "avoid_static" [included=1, expected=no_effect];
+    "vehicle_front_two_wheeled" -> "abide_rules" [included=1, expected=no_effect];
+    "vehicle_front_two_wheeled" -> "reach_destination" [included=1, expected=no_effect];
+
+    "vehicle_adjacent_two_wheeled" -> "follow_center" [included=1, expected=no_effect];
+    "vehicle_adjacent_two_wheeled" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "vehicle_adjacent_two_wheeled" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "vehicle_adjacent_two_wheeled" -> "avoid_static" [included=1, expected=no_effect];
+    "vehicle_adjacent_two_wheeled" -> "abide_rules" [included=1, expected=no_effect];
+    "vehicle_adjacent_two_wheeled" -> "reach_destination" [included=1, expected=no_effect];
+
+    "vehicle_opposite_two_wheeled" -> "follow_center" [included=1, expected=no_effect];
+    "vehicle_opposite_two_wheeled" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "vehicle_opposite_two_wheeled" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "vehicle_opposite_two_wheeled" -> "avoid_static" [included=1, expected=no_effect];
+    "vehicle_opposite_two_wheeled" -> "abide_rules" [included=1, expected=no_effect];
+    "vehicle_opposite_two_wheeled" -> "reach_destination" [included=1, expected=no_effect];
+
+    "time" -> "follow_center" [included=1, expected=no_effect];
+    "time" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "time" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "time" -> "avoid_static" [included=1, expected=no_effect];
+    "time" -> "abide_rules" [included=1, expected=no_effect];
+    "time" -> "reach_destination" [included=1, expected=no_effect];
+
+    "weather" -> "follow_center" [included=1, expected=no_effect];
+    "weather" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "weather" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "weather" -> "avoid_static" [included=1, expected=no_effect];
+    "weather" -> "abide_rules" [included=1, expected=no_effect];
+    "weather" -> "reach_destination" [included=1, expected=no_effect];
+
+    "pedestrian_density" -> "follow_center" [included=1, expected=no_effect];
+    "pedestrian_density" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "pedestrian_density" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "pedestrian_density" -> "avoid_static" [included=1, expected=no_effect];
+    "pedestrian_density" -> "abide_rules" [included=1, expected=no_effect];
+    "pedestrian_density" -> "reach_destination" [included=1, expected=no_effect];
+
+    "target_speed" -> "follow_center" [included=1, expected=no_effect];
+    "target_speed" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "target_speed" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "target_speed" -> "avoid_static" [included=1, expected=no_effect];
+    "target_speed" -> "abide_rules" [included=1, expected=no_effect];
+    "target_speed" -> "reach_destination" [included=1, expected=no_effect];
+
+    "trees" -> "follow_center" [included=1, expected=no_effect];
+    "trees" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "trees" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "trees" -> "avoid_static" [included=1, expected=no_effect];
+    "trees" -> "abide_rules" [included=1, expected=no_effect];
+    "trees" -> "reach_destination" [included=1, expected=no_effect];
+
+    "buildings" -> "follow_center" [included=1, expected=no_effect];
+    "buildings" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "buildings" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "buildings" -> "avoid_static" [included=1, expected=no_effect];
+    "buildings" -> "abide_rules" [included=1, expected=no_effect];
+    "buildings" -> "reach_destination" [included=1, expected=no_effect];
+
+    "task" -> "follow_center" [included=1, expected=no_effect];
+    "task" -> "avoid_vehicles" [included=1, expected=no_effect];
+    "task" -> "avoid_pedestrians" [included=1, expected=no_effect];
+    "task" -> "avoid_static" [included=1, expected=no_effect];
+    "task" -> "abide_rules" [included=1, expected=no_effect];
+    "task" -> "reach_destination" [included=1, expected=no_effect];
+}
