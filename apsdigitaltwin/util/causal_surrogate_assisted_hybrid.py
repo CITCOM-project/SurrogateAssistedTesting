@@ -1,45 +1,61 @@
+"""Module containing classes to define and run causal surrogate assisted test cases"""
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Callable
+
 from causal_testing.data_collection.data_collector import ObservationalDataCollector
 from causal_testing.specification.causal_specification import CausalSpecification
 from causal_testing.testing.base_test_case import BaseTestCase
-from causal_testing.testing.estimators import Estimator, PolynomialRegressionEstimator
-
-from dataclasses import dataclass
-from typing import Callable, Any
+from causal_testing.testing.estimators import CubicSplineRegressionEstimator
 
 
 @dataclass
 class SimulationResult:
+    """Data class holding the data and result metadata of a simulation"""
+
     data: dict
     fault: bool
     relationship: str
 
 
-@dataclass
-class SearchFitnessFunction:
-    fitness_function: Any
-    surrogate_model: PolynomialRegressionEstimator
+class SearchAlgorithm(ABC):
+    """Class to be inherited with the search algorithm consisting of a search function and the fitness function of the
+    space to be searched"""
+
+    @abstractmethod
+    def search(
+        self, surrogate_models: list[CubicSplineRegressionEstimator], specification: CausalSpecification
+    ) -> list:
+        """Function which implements a search routine which searches for the optimal fitness value for the specified
+        scenario
+        :param surrogate_models: The surrogate models to be searched
+        :param specification:  The Causal Specification (combination of Scenario and Causal Dag)"""
 
 
-class SearchAlgorithm:
-    def generate_fitness_functions(self, surrogate_models: list[Estimator]) -> list[SearchFitnessFunction]:
-        pass
+class Simulator(ABC):
+    """Class to be inherited with Simulator specific functions to start, shutdown and run the simulation with the give
+    config file"""
 
-    def search(self, fitness_functions: list[SearchFitnessFunction], specification: CausalSpecification) -> list:
-        pass
-
-
-class Simulator:
+    @abstractmethod
     def startup(self, **kwargs):
-        pass
+        """Function that when run, initialises and opens the Simulator"""
 
+    @abstractmethod
     def shutdown(self, **kwargs):
-        pass
+        """Function to safely exit and shutdown the Simulator"""
 
-    def run_with_config(self, configuration) -> SimulationResult:
-        pass
+    @abstractmethod
+    def run_with_config(self, configuration: dict) -> SimulationResult:
+        """Run the simulator with the given configuration and return the results in the structure of a
+        SimulationResult
+        :param configuration: The configuration required to initialise the Simulation
+        :return: Simulation results in the structure of the SimulationResult data class"""
 
 
 class CausalSurrogateAssistedTestCase:
+    """A class representing a single causal surrogate assisted test case."""
+
     def __init__(
         self,
         specification: CausalSpecification,
@@ -58,26 +74,28 @@ class CausalSurrogateAssistedTestCase:
         max_executions: int = 200,
         custom_data_aggregator: Callable[[dict, dict], dict] = None,
     ):
+        """For this specific test case, a search algorithm is used to find the most contradictory point in the input
+        space which is, therefore, most likely to indicate incorrect behaviour. This cadidate test case is run against
+        the simulator, checked for faults and the result returned with collected data
+        :param data_collector: An ObservationalDataCollector which gathers data relevant to the specified scenario
+        :param max_executions: Maximum number of simulator executions before exiting the search
+        :param custom_data_aggregator:
+        :return: tuple containing SimulationResult or str, execution number and collected data"""
         data_collector.collect_data()
 
         res = None
-        iter = 0
+        iter = 200
 
         for i in range(max_executions):
             candidate_test_case = None
             if i % 2 == 0:
                 surrogate_model = self.search_algorithm_ensemble.generate_ensemble(data_collector.data)
-                fitness_functions = self.search_algorithm_ensemble.generate_fitness_functions(surrogate_model)
                 candidate_test_case, _fitness, surrogate = self.search_algorithm_ensemble.search(
-                    fitness_functions, self.specification
+                    surrogate_model, self.specification
                 )
             else:
                 surrogate_models = self.generate_surrogates(self.specification, data_collector)
-                fitness_functions = self.search_algorithm.generate_fitness_functions(surrogate_models)
-                candidate_test_case, _fitness, surrogate = self.search_algorithm.search(
-                    fitness_functions, self.specification
-                )
-
+                candidate_test_case, _, surrogate = self.search_algorithm.search(surrogate_models, self.specification)
 
             self.simulator.startup()
             test_result = self.simulator.run_with_config(candidate_test_case)
@@ -97,7 +115,7 @@ class CausalSurrogateAssistedTestCase:
                 res = test_result
                 iter = i + 1
 
-        if res == None:
+        if res is None:
             res = "No fault found"
             iter = 200
 
@@ -106,7 +124,12 @@ class CausalSurrogateAssistedTestCase:
 
     def generate_surrogates(
         self, specification: CausalSpecification, data_collector: ObservationalDataCollector
-    ) -> list[SearchFitnessFunction]:
+    ) -> list[CubicSplineRegressionEstimator]:
+        """Generate a surrogate model for each edge of the dag that specifies it is included in the DAG metadata.
+        :param specification: The Causal Specification (combination of Scenario and Causal Dag)
+        :param data_collector: An ObservationalDataCollector which gathers data relevant to the specified scenario
+        :return: A list of surrogate models
+        """
         surrogate_models = []
 
         for u, v in specification.causal_dag.graph.edges:
@@ -118,7 +141,7 @@ class CausalSurrogateAssistedTestCase:
 
                 minimal_adjustment_set = specification.causal_dag.identification(base_test_case, specification.scenario)
 
-                surrogate = PolynomialRegressionEstimator(
+                surrogate = CubicSplineRegressionEstimator(
                     u,
                     0,
                     0,

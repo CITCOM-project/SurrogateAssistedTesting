@@ -3,7 +3,7 @@ from causal_testing.specification.causal_dag import CausalDAG
 from causal_testing.specification.causal_specification import CausalSpecification
 from causal_testing.specification.scenario import Scenario
 from causal_testing.specification.variable import Input, Output
-from apsdigitaltwin.util.causal_surrogate_assisted_hybrid import CausalSurrogateAssistedTestCase, SimulationResult, Simulator
+from util.causal_surrogate_assisted_hybrid import CausalSurrogateAssistedTestCase, SimulationResult, Simulator
 from causal_testing.surrogate.surrogate_search_algorithms import GeneticSearchAlgorithm
 from util.surrogate_search_algorithms_new import GeneticEnembleSearchAlgorithm
 from util.model import Model, OpenAPS, i_label, g_label, s_label
@@ -83,6 +83,12 @@ class APSDigitalTwinSimulator(Simulator):
         violation = max_bg > 200 or min_bg < 50
 
         return SimulationResult(data, violation, None)
+    
+    def startup(self, **kwargs):
+        return super().startup(**kwargs)
+    
+    def shutdown(self, **kwargs):
+        return super().shutdown(**kwargs)
 
 def main(file):
     random.seed(123)
@@ -150,22 +156,14 @@ def main(file):
 if __name__ == "__main__":
     load_dotenv()
 
-    valid = open("hybrid", "r")
-    valid_traces = valid.read.split(",")
-    valid.close()
-
     all_traces = os.listdir("./datasets")
-    while len(all_traces) > 0:
-        num = 930
-        if num > len(all_traces):
-            num = len(all_traces)
+    finished_traces = os.listdir("./outputs_3_nostop")
+    pool_vals = []
 
-        with mp.Pool(processes=num) as pool:
-            pool_vals = []
-            while len(pool_vals) < num and len(all_traces) > 0:
-                data_trace = all_traces.pop()
-                if data_trace.endswith(".csv") and data_trace in valid:
-                    if len(pd.read_csv(os.path.join("./datasets", data_trace))) >= 300:
-                        pool_vals.append(f"./datasets/{data_trace[:-4]}")
+    for data_trace in all_traces:
+        if data_trace.endswith(".csv") and data_trace[:-4] + ".txt" not in finished_traces:
+            if len(pd.read_csv(os.path.join("./datasets", data_trace))) >= 300:
+                pool_vals.append(f"./datasets/{data_trace[:-4]}")
 
-            pool.map(main, pool_vals)
+    with mp.Pool(processes=100) as pool:
+        pool.map(main, pool_vals)

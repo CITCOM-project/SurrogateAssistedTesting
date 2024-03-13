@@ -1,42 +1,8 @@
 from causal_testing.data_collection.data_collector import ObservationalDataCollector
 from causal_testing.specification.causal_specification import CausalSpecification
-from causal_testing.testing.base_test_case import BaseTestCase
-from causal_testing.testing.estimators import Estimator, PolynomialRegressionEstimator
+from causal_testing.surrogate.causal_surrogate_assisted import SearchAlgorithm, Simulator
 
-from dataclasses import dataclass
-from typing import Callable, Any
-
-
-@dataclass
-class SimulationResult:
-    data: dict
-    fault: bool
-    relationship: str
-
-
-@dataclass
-class SearchFitnessFunction:
-    fitness_function: Any
-    surrogate_model: PolynomialRegressionEstimator
-
-
-class SearchAlgorithm:
-    def generate_fitness_functions(self, surrogate_models: list[Estimator]) -> list[SearchFitnessFunction]:
-        pass
-
-    def search(self, fitness_functions: list[SearchFitnessFunction], specification: CausalSpecification) -> list:
-        pass
-
-
-class Simulator:
-    def startup(self, **kwargs):
-        pass
-
-    def shutdown(self, **kwargs):
-        pass
-
-    def run_with_config(self, configuration) -> SimulationResult:
-        pass
+from typing import Callable
 
 
 class CausalSurrogateAssistedTestCase:
@@ -59,13 +25,12 @@ class CausalSurrogateAssistedTestCase:
         data_collector.collect_data()
 
         res = None
-        iter = 0
+        iter = 200
 
         for i in range(max_executions):
             surrogate_model = self.search_algorithm.generate_ensemble(data_collector.data)
-            fitness_functions = self.search_algorithm.generate_fitness_functions(surrogate_model)
             candidate_test_case, _fitness, surrogate = self.search_algorithm.search(
-                fitness_functions, self.specification
+                surrogate_model, self.specification
             )
 
             self.simulator.startup()

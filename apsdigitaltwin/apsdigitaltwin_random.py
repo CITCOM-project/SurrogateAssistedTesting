@@ -82,6 +82,12 @@ class APSDigitalTwinSimulator(Simulator):
         violation = max_bg > 200 or min_bg < 50
 
         return SimulationResult(data, violation, None)
+    
+    def startup(self, **kwargs):
+        return super().startup(**kwargs)
+    
+    def shutdown(self, **kwargs):
+        return super().shutdown(**kwargs)
 
 def main(file):
     random.seed(123)

@@ -1,6 +1,4 @@
 from causal_testing.specification.causal_specification import CausalSpecification
-from causal_testing.testing.estimators import Estimator, PolynomialRegressionEstimator
-from causal_testing.surrogate.causal_surrogate_assisted import SearchAlgorithm, SearchFitnessFunction
 from causal_testing.surrogate.surrogate_search_algorithms import GeneticSearchAlgorithm
 from util.ensemble_util import Ensemble
 
@@ -20,19 +18,13 @@ class GeneticEnembleSearchAlgorithm(GeneticSearchAlgorithm):
     def generate_ensemble(self, data):
         return Ensemble(data)
 
-    def generate_fitness_functions(
-        self, surrogate_model: Ensemble
-    ) -> SearchFitnessFunction:
+    def search(self, surrogate_model: Ensemble, specification: CausalSpecification) -> list:
 
         def fitness_function(_ga, solution, idx):
             return surrogate_model.predict(solution)
-
-        search_fitness_function = SearchFitnessFunction(fitness_function, surrogate_model)
-        return search_fitness_function
-
-    def search(self, fitness_function: SearchFitnessFunction, specification: CausalSpecification) -> list:
+        
         var_space = dict()
-        for adj in fitness_function.surrogate_model.vars:
+        for adj in surrogate_model.vars:
             var_space[adj] = dict()
 
         for relationship in list(specification.scenario.constraints):
@@ -41,22 +33,22 @@ class GeneticEnembleSearchAlgorithm(GeneticSearchAlgorithm):
             if rel_split[1] == ">=":
                 var_space[rel_split[0]]["low"] = int(rel_split[2])
             elif rel_split[1] == "<=":
-                var_space[rel_split[0]]["high"] = int(rel_split[2])
+                var_space[rel_split[0]]["high"] = int(rel_split[2]) + 1
 
         gene_space = []
-        for adj in fitness_function.surrogate_model.vars:
+        for adj in surrogate_model.vars:
             gene_space.append(var_space[adj])
 
         gene_types = []
-        for adj in fitness_function.surrogate_model.vars:
+        for adj in surrogate_model.vars:
             gene_types.append(specification.scenario.variables.get(adj).datatype)
 
         ga = GA(
             num_generations=200,
             num_parents_mating=4,
-            fitness_func=fitness_function.fitness_function,
+            fitness_func=fitness_function,
             sol_per_pop=10,
-            num_genes=len(fitness_function.surrogate_model.vars),
+            num_genes=len(surrogate_model.vars),
             gene_space=gene_space,
             gene_type=gene_types,
         )
@@ -73,6 +65,6 @@ class GeneticEnembleSearchAlgorithm(GeneticSearchAlgorithm):
         solution, fitness, _idx = ga.best_solution()
 
         solution_dict = dict()
-        for idx, adj in enumerate(fitness_function.surrogate_model.vars):
+        for idx, adj in enumerate(surrogate_model.vars):
             solution_dict[adj] = solution[idx]
-        return (solution_dict, fitness, fitness_function.surrogate_model)
+        return (solution_dict, fitness, surrogate_model)
