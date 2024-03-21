@@ -45,7 +45,7 @@ def main(seed):
             "target_speed": random.randint(2, 4),
             "trees": random.randint(0, 1),
             "buildings": random.randint(0, 1),
-            "task": random.randint(0, 3),
+            "task": random.randint(0, 2),
         }
 
         simulator.startup()

@@ -66,7 +66,7 @@ def main(seed):
             "target_speed": random.randint(2, 4),
             "trees": random.randint(0, 1),
             "buildings": random.randint(0, 1),
-            "task": random.randint(0, 3),
+            "task": random.randint(0, 2),
         }
 
         simulator.startup()
@@ -81,9 +81,9 @@ def main(seed):
 
 if __name__ == "__main__":
 
-    # gpus = tf.config.experimental.list_physical_devices('GPU')
-    # for gpu in gpus:
-    #     tf.config.experimental.set_memory_growth(gpu, True)
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
 
 
     all_seeds = range(1,31)

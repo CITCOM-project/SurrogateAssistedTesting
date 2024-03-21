@@ -63,7 +63,7 @@ def main(i):
         target_speed >= 2, target_speed <= 4,
         trees >= 0, trees <= 1,
         buildings >= 0, buildings <= 1,
-        task >= 0, task <= 3,
+        task >= 0, task <= 2,
     }
 
     scenario = Scenario(
