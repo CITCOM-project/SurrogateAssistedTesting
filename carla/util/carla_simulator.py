@@ -1,5 +1,5 @@
-from carla.util.carla_interface import run_single_scenario
-from carla.util.causal_surrogate_assisted_3 import SimulationResult, Simulator
+from util.carla_interface import run_single_scenario
+from util.causal_surrogate_assisted_3 import SimulationResult, Simulator
 
 
 class CarlaSimulator(Simulator):
@@ -13,7 +13,7 @@ class CarlaSimulator(Simulator):
         pass
 
     def run_with_config(self, configuration) -> SimulationResult:
-        threshold_criteria = [0,0,0,0,0.95,0]
+        threshold_criteria = [0.95,0,0,0,0,0]
 
         res = (1000,1000,1000,1000,1000,1000)
 

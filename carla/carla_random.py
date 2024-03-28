@@ -1,4 +1,4 @@
-from carla.util.carla_simulator import CarlaSimulator
+from util.carla_simulator import CarlaSimulator
 from causal_testing.data_collection.data_collector import ObservationalDataCollector
 from causal_testing.specification.causal_dag import CausalDAG
 from causal_testing.specification.causal_specification import CausalSpecification

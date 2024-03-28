@@ -88,7 +88,7 @@ def process(args):
         for i, adjustment in enumerate(surrogate.adjustment_set):
             adjustment_dict[adjustment] = solution[i + 1]
 
-        ate = surrogate.estimate_ate_calculated(adjustment_dict)
+        ate = surrogate.estimate_ate_calculated(adjustment_dict)[0]
 
         return contradiction_function(ate)
 
