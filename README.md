@@ -40,7 +40,7 @@ python carla.py             # Evaluate the causal surrogate approach
 python carla_ensemble.py    # Evaluate the associative approach
 python carla_random.py      # Evaluate random search
 
-python rq2.py               # Analyse the results and generate the figure
+python rq1.py               # Analyse the results and generate the figure
 ```
 
 ## oref0 - Full evaluation
@@ -61,6 +61,6 @@ python apsdigitaltwin_hybrid.py     # Evaluate the causal surrogate approach
 python apsdigitaltwin_ensemble.py   # Evaluate the associative approach
 python apsdigitaltwin_random.py     # Evaluate random search
 
-python rq1.py                       # Analyse the results and generate the figure for RQ1
-python rq2.py                       # Analyse the results and generate the figure for RQ2
+python rq2.py                       # Analyse the results and generate the figure for RQ1
+python rq3.py                       # Analyse the results and generate the figure for RQ2
 ```
