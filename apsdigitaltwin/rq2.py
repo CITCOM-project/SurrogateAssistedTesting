@@ -26,7 +26,7 @@ for trace in os.listdir("./outputs_4"):
         file = open(os.path.join("outputs_4", trace))
         num = int(file.read().split("\n")[1])
         if num < 200:
-            hybrid.append(num)
+            hybrid.append(num - 1)
 
 random_cumulative = [0]
 for i in range(200):
@@ -40,9 +40,11 @@ hybrid_cumulative = [0]
 for i in range(200):
     hybrid_cumulative.append(len([x for x in hybrid if x <= i]))
 
-sns.lineplot({"Hybrid": hybrid_cumulative,
+sns.lineplot({"Causally-Assisted": hybrid_cumulative,
               "Ensemble": ensemble_cumulative,
               "Random": random_cumulative})
+
+plt.gcf().set_size_inches(10, 4)
 
 plt.title("Search Iterations to find a Violation")
 plt.xlabel("Search Iterations")
@@ -54,5 +56,6 @@ plt.gca().title.set_fontsize(18)
 for item in plt.gca().get_xticklabels() + plt.gca().get_yticklabels():
     item.set_fontsize(12)
 
+plt.tight_layout()
 plt.savefig("./figures/RQ2.png")
 plt.show()

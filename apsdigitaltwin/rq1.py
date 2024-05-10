@@ -265,9 +265,9 @@ pd.DataFrame({
     
 fig, axes = plt.subplots(1, 2, sharey=True)
 
-sns.lineplot({"Ensemble BG": np.divide(np.array(success_ensemble_bg) + np.array(failure_ensemble_bg), 2),
-              "Ensemble COB": np.divide(np.array(success_ensemble_cob) + np.array(failure_ensemble_cob), 2),
-              "Ensemble IOB": np.divide(np.array(success_ensemble_iob) + np.array(failure_ensemble_iob), 2),
+sns.lineplot({"Initial BG": np.divide(np.array(success_ensemble_bg) + np.array(failure_ensemble_bg), 2),
+              "Initial COB": np.divide(np.array(success_ensemble_cob) + np.array(failure_ensemble_cob), 2),
+              "Initial IOB": np.divide(np.array(success_ensemble_iob) + np.array(failure_ensemble_iob), 2),
               }, ax=axes[0])
 
 axes[0].fill_between(range(len(success_ensemble_bg)), 
@@ -281,9 +281,9 @@ axes[0].fill_between(range(len(success_ensemble_iob)),
                      np.divide(np.array(success_ensemble_iob_lower) + np.array(failure_ensemble_iob_lower), 2), 
                      np.divide(np.array(success_ensemble_iob_upper) + np.array(failure_ensemble_iob_upper), 2), alpha=0.2)
 
-sns.lineplot({"Hybrid BG": np.divide(np.array(success_hybrid_bg) + np.array(failure_hybrid_bg), 2),
-              "Hybrid COB": np.divide(np.array(success_hybrid_cob) + np.array(failure_hybrid_cob), 2),
-              "Hybrid IOB": np.divide(np.array(success_hybrid_iob) + np.array(failure_hybrid_iob), 2)}, ax=axes[1])
+sns.lineplot({"Initial BG": np.divide(np.array(success_hybrid_bg) + np.array(failure_hybrid_bg), 2),
+              "Initial COB": np.divide(np.array(success_hybrid_cob) + np.array(failure_hybrid_cob), 2),
+              "Initial IOB": np.divide(np.array(success_hybrid_iob) + np.array(failure_hybrid_iob), 2)}, ax=axes[1])
 
 axes[1].fill_between(range(len(success_hybrid_bg)), 
                      np.divide(np.array(success_hybrid_bg_lower) + np.array(failure_hybrid_bg_lower), 2), 
@@ -307,7 +307,7 @@ for ax in axes:
         item.set_fontsize(12)
 
 axes[0].set_title(f"Ensemble Test Set Divergence", fontsize=16)
-axes[1].set_title(f"Hybrid Test Set Divergence", fontsize=16)
+axes[1].set_title(f"Causally-Assisted Test Set Divergence", fontsize=16)
 
 fig.tight_layout()
 fig.savefig("./figures/RQ1.png")
