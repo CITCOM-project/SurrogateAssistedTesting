@@ -89,9 +89,10 @@ class APSDigitalTwinSimulator(Simulator):
     def shutdown(self, **kwargs):
         return super().shutdown(**kwargs)
 
-def main(file):
-    random.seed(123)
-    np.random.seed(123)
+def main(idx_file):
+    idx, file = idx_file
+    random.seed(idx)
+    np.random.seed(idx)
 
     constants = []
     const_file_name = file.replace("datasets", "constants").replace("_np_random_random_nonfaulty_scenarios", ".txt")
@@ -143,11 +144,11 @@ if __name__ == "__main__":
 
     pool_vals = []
 
-    for data_trace in all_traces:
+    for idx, data_trace in enumerate(all_traces):
         if data_trace[:-4] + ".txt" not in all_finished:
             if data_trace.endswith(".csv"):
                 if len(pd.read_csv(os.path.join("./datasets", data_trace))) >= 300:
-                    pool_vals.append(f"./datasets/{data_trace[:-4]}")
+                    pool_vals.append((f"./datasets/{data_trace[:-4]}", idx))
 
     with mp.Pool(processes=20) as pool:
         pool.map(main, pool_vals)
