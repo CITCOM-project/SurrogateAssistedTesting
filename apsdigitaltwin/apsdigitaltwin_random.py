@@ -91,8 +91,9 @@ class APSDigitalTwinSimulator(Simulator):
 
 def main(idx_file):
     idx, file = idx_file
-    random.seed(idx)
-    np.random.seed(idx)
+    local_random = random.Random()
+    local_random.seed(idx)
+    np.random.seed(123)
 
     constants = []
     const_file_name = file.replace("datasets", "constants").replace("_np_random_random_nonfaulty_scenarios", ".txt")
@@ -110,9 +111,9 @@ def main(idx_file):
 
     for i in range(200):
         candidate_test_case = {
-            "start_bg": random.random() * (180 - 70) + 70,
-            "start_cob": random.random() * (300 - 100) + 100,
-            "start_iob": random.random() * (150 - 0) + 0,
+            "start_bg": local_random.random() * (180 - 70) + 70,
+            "start_cob": local_random.random() * (300 - 100) + 100,
+            "start_iob": local_random.random() * (150 - 0) + 0,
         }
 
         simulator.startup()
