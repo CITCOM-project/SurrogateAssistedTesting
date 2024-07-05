@@ -149,7 +149,7 @@ if __name__ == "__main__":
         if data_trace[:-4] + ".txt" not in all_finished:
             if data_trace.endswith(".csv"):
                 if len(pd.read_csv(os.path.join("./datasets", data_trace))) >= 300:
-                    pool_vals.append((f"./datasets/{data_trace[:-4]}", idx))
+                    pool_vals.append((idx, f"./datasets/{data_trace[:-4]}"))
 
-    with mp.Pool(processes=20) as pool:
+    with mp.Pool(processes=192) as pool:
         pool.map(main, pool_vals)

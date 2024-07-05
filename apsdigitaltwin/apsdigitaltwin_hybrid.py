@@ -157,7 +157,7 @@ if __name__ == "__main__":
     load_dotenv()
 
     all_traces = os.listdir("./datasets")
-    finished_traces = os.listdir("./outputs_3_nostop")
+    finished_traces = os.listdir("./outputs_3")
     pool_vals = []
 
     for data_trace in all_traces:
@@ -165,5 +165,5 @@ if __name__ == "__main__":
             if len(pd.read_csv(os.path.join("./datasets", data_trace))) >= 300:
                 pool_vals.append(f"./datasets/{data_trace[:-4]}")
 
-    with mp.Pool(processes=100) as pool:
+    with mp.Pool(processes=192) as pool:
         pool.map(main, pool_vals)

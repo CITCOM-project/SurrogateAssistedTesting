@@ -3,7 +3,7 @@ from causal_testing.specification.causal_dag import CausalDAG
 from causal_testing.specification.causal_specification import CausalSpecification
 from causal_testing.specification.scenario import Scenario
 from causal_testing.specification.variable import Input, Output
-from apsdigitaltwin.util.causal_surrogate_assisted_ensemble import CausalSurrogateAssistedTestCase, SimulationResult, Simulator
+from util.causal_surrogate_assisted_ensemble import CausalSurrogateAssistedTestCase, SimulationResult, Simulator
 from util.surrogate_search_algorithms_new import GeneticEnembleSearchAlgorithm
 from util.model import Model, OpenAPS, i_label, g_label, s_label
 
@@ -154,25 +154,14 @@ def main(file):
 if __name__ == "__main__":
     load_dotenv()
 
-    valid = open("ensemble", "r")
-    valid_traces = valid.read.split(",")
-    valid.close()
-
-    all_finished = os.listdir("./outputs_2_ensemble")
-
+    finished_traces = os.listdir("./outputs_2_ensemble")
     all_traces = os.listdir("./datasets")
-    while len(all_traces) > 0:
-        num = 930
-        if num > len(all_traces):
-            num = len(all_traces)
+    pool_vals = []
 
-        with mp.Pool(processes=num) as pool:
-            pool_vals = []
-            while len(pool_vals) < num and len(all_traces) > 0:
-                data_trace = all_traces.pop()
-                if data_trace.endswith(".csv") and data_trace in valid:
-                    if len(pd.read_csv(os.path.join("./datasets", data_trace))) >= 300:
-                        if data_trace[:-4] + ".txt" not in all_finished:
-                            pool_vals.append(f"./datasets/{data_trace[:-4]}")
+    for data_trace in all_traces:
+        if data_trace.endswith(".csv") and data_trace[:-4] + ".txt" not in finished_traces:
+            if len(pd.read_csv(os.path.join("./datasets", data_trace))) >= 300:
+                pool_vals.append(f"./datasets/{data_trace[:-4]}")
 
-            pool.map(main, pool_vals)
+    with mp.Pool(processes=192) as pool:
+        pool.map(main, pool_vals)
