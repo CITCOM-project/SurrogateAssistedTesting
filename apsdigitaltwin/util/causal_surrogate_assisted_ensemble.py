@@ -3,6 +3,37 @@ from causal_testing.specification.causal_specification import CausalSpecificatio
 from causal_testing.surrogate.causal_surrogate_assisted import SearchAlgorithm, Simulator
 
 from typing import Callable
+from dataclasses import dataclass
+from abc import ABC, abstractmethod
+
+
+@dataclass
+class SimulationResult:
+    """Data class holding the data and result metadata of a simulation"""
+
+    data: dict
+    fault: bool
+    relationship: str
+
+
+class Simulator(ABC):
+    """Class to be inherited with Simulator specific functions to start, shutdown and run the simulation with the give
+    config file"""
+
+    @abstractmethod
+    def startup(self, **kwargs):
+        """Function that when run, initialises and opens the Simulator"""
+
+    @abstractmethod
+    def shutdown(self, **kwargs):
+        """Function to safely exit and shutdown the Simulator"""
+
+    @abstractmethod
+    def run_with_config(self, configuration: dict) -> SimulationResult:
+        """Run the simulator with the given configuration and return the results in the structure of a
+        SimulationResult
+        :param configuration: The configuration required to initialise the Simulation
+        :return: Simulation results in the structure of the SimulationResult data class"""
 
 
 class CausalSurrogateAssistedTestCase:
