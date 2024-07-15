@@ -22,6 +22,12 @@ conda activate causal-surrogates
 pip install -r requirements.txt
 ```
 
+You will then need to create the following empty directories
+```
+{base_path}/carla/{datasets,outputs,outputs_ensemble,outputs_RS}
+{base_path}/apsdigitaltwin/{outputs_3,outputs_2_ensemble,outputs_RS}
+```
+
 ## Pylot - Proof of Concept
 
 Found in directory `{base_path}/carla`
@@ -40,7 +46,7 @@ python carla.py             # Evaluate the causal surrogate approach
 python carla_ensemble.py    # Evaluate the associative approach
 python carla_random.py      # Evaluate random search
 
-python rq1.py               # Analyse the results and generate the figure
+python rq1.py               # Analyse the results and generate the figure for RQ1
 ```
 
 ## oref0 - Full evaluation
@@ -61,6 +67,6 @@ python apsdigitaltwin_hybrid.py     # Evaluate the causal surrogate approach
 python apsdigitaltwin_ensemble.py   # Evaluate the associative approach
 python apsdigitaltwin_random.py     # Evaluate random search
 
-python rq2.py                       # Analyse the results and generate the figure for RQ1
-python rq3.py                       # Analyse the results and generate the figure for RQ2
+python rq2.py                       # Analyse the results and generate the figure for RQ2
+python rq3.py                       # Analyse the results and generate the figure for RQ3
 ```

@@ -5,27 +5,27 @@ import seaborn as sns
 
 random = []
 
-for trace in os.listdir("./outputs_random_reinterpreted"):
+for trace in os.listdir("./outputs_RS"):
     if trace.endswith(".txt"):
-        with open(os.path.join("./outputs_random", trace)) as file:
+        with open(os.path.join("./outputs_RS", trace)) as file:
             num = file.readlines()[1]
             if num != "200":
                 random.append(int(num))
 
 ensemble = []
 
-for trace in os.listdir("./outputs_ensemble_reinterpreted"):
+for trace in os.listdir("./outputs_ensemble"):
     if trace.endswith(".txt"):
-        with open(os.path.join("./outputs_ensemble_reinterpreted", trace)) as file:
+        with open(os.path.join("./outputs_ensemble", trace)) as file:
             num = file.readlines()[1]
             if num != "200":
                 ensemble.append(int(num))
 
 hybrid = []
 
-for trace in os.listdir("./outputs_hybrid_reinterpreted"):
+for trace in os.listdir("./outputs"):
     if trace.endswith(".txt"):
-        with open(os.path.join("./outputs_hybrid_reinterpreted", trace)) as file:
+        with open(os.path.join("./outputs", trace)) as file:
             num = file.readlines()[1]
             if num != "200":
                 hybrid.append(int(num))
