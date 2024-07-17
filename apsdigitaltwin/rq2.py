@@ -2,42 +2,44 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import seaborn as sns
+import numpy as np
 
 random = []
 
-for trace in os.listdir("./output_random"):
-    if trace.endswith(".csv"):
-        df = pd.read_csv(os.path.join("output_random", trace))
-        if len(df) < 500:
-            random.append(len(df) - 300)
+for trace in os.listdir("./outputs_RS"):
+    if trace.endswith(".txt"):
+        with open(os.path.join("outputs_RS", trace), "r") as file:
+            output = file.read()
+            num = output.split("\n")[1]
+            random.append(int(num))
 
 ensemble = []
 
-for trace in os.listdir("./output_2_ensemble"):
-    if trace.endswith(".csv"):
-        df = pd.read_csv(os.path.join("output_2_ensemble", trace))
-        if len(df) < 500:
-            ensemble.append(len(df) - 300)
+for trace in os.listdir("./outputs_2_ensemble"):
+    if trace.endswith(".txt"):
+        with open(os.path.join("outputs_2_ensemble", trace), "r") as file:
+            output = file.read()
+            num = output.split("\n")[1]
+            ensemble.append(int(num))
 
 hybrid = []
 
-for trace in os.listdir("./outputs_4"):
+for trace in os.listdir("./outputs_3"):
     if trace.endswith(".txt"):
-        file = open(os.path.join("outputs_4", trace))
-        num = int(file.read().split("\n")[1])
-        if num < 200:
-            hybrid.append(num - 1)
+        with open(os.path.join("outputs_3", trace), "r") as file:
+            output = file.read()
+            num = output.split("\n")[1]
+            hybrid.append(int(num))
 
-random_cumulative = [0]
+random_cumulative = []
 for i in range(200):
     random_cumulative.append(len([x for x in random if x <= i]))
-    print(len([x for x in random if x <= i]))
 
-ensemble_cumulative = [0]
+ensemble_cumulative = []
 for i in range(200):
     ensemble_cumulative.append(len([x for x in ensemble if x <= i]))
 
-hybrid_cumulative = [0]
+hybrid_cumulative = []
 for i in range(200):
     hybrid_cumulative.append(len([x for x in hybrid if x <= i]))
 
@@ -58,5 +60,5 @@ for item in plt.gca().get_xticklabels() + plt.gca().get_yticklabels():
     item.set_fontsize(12)
 
 plt.tight_layout()
-# plt.savefig("./figures/RQ2.png")
+plt.savefig("./figures/RQ2.png")
 plt.show()

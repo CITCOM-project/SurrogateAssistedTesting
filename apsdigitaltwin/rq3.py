@@ -49,19 +49,6 @@ def average_entropy(traces):
         res = pool.map(entropy_func, pool_vals)
         for d, trace in res:
             entropy_vals.append(d)
-            # plt.plot(d, c="r", linewidth=1)
-            # plt.gca().set_xlim([300, 500])
-            # plt.gca().set_ylim([0, 1])
-            # plt.title("Test Set Entropy")
-            # plt.xlabel("Search Iterations")
-            # plt.ylabel("Test Set Diameter")
-            # plt.gca().title.set_fontsize(18)
-            # plt.gca().xaxis.label.set_fontsize(14)
-            # plt.gca().yaxis.label.set_fontsize(14)
-            # for item in plt.gca().get_xticklabels() + plt.gca().get_yticklabels():
-            #     item.set_fontsize(12)
-            # plt.savefig(f"./graph_outputs/{trace[:-4]}.png")
-            # plt.clf()
 
     return entropy_vals
 
@@ -89,9 +76,8 @@ def average_entropy_split(traces):
 
     return entropy_vals_success, entropy_vals_failure
 
-success_ensemble = average_entropy("outputs_2_ensemble_nostop")
-failure_ensemble = average_entropy("output_2_ensemble")
-success_hybrid, failure_hybrid = average_entropy_split("outputs_4")
+success_ensemble, failure_ensemble = average_entropy_split("output_2_ensemble")
+success_hybrid, failure_hybrid = average_entropy_split("outputs_3")
 
 success_ensemble_bg = []
 success_ensemble_bg_lower = []
@@ -310,6 +296,6 @@ axes[0].set_title(f"Ensemble Test Set Divergence", fontsize=16)
 axes[1].set_title(f"Causally-Assisted Test Set Divergence", fontsize=16)
 
 fig.tight_layout()
-fig.savefig("./figures/RQ1.png")
+fig.savefig("./figures/RQ3.png")
 
 plt.show()
