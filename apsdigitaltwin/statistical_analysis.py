@@ -7,6 +7,12 @@ import scipy.stats as stats
 
 import os
 
+def cohen_d(x,y):
+    nx = len(x)
+    ny = len(y)
+    dof = nx + ny - 2
+    return (np.mean(x) - np.mean(y)) / np.sqrt(((nx-1)*np.std(x, ddof=1) ** 2 + (ny-1)*np.std(y, ddof=1) ** 2) / dof)
+
 ensemble = []
 
 for trace in os.listdir("./outputs_ensemble"):
@@ -41,7 +47,7 @@ distribution_pairs = list(zip(ensemble_dists, hybrid_dists))
 
 p_values = []
 
-for e_dist, h_dist in distribution_pairs:
+for idx, (e_dist, h_dist) in enumerate(distribution_pairs):
     ensemble_samples = []
     hybrid_samples = []
 
@@ -50,11 +56,15 @@ for e_dist, h_dist in distribution_pairs:
         hybrid_samples.append(np.average(h_dist[i * 33: (i * 33) + 33]))
 
     print(
+        idx * 10 + 10,
+
         np.mean(ensemble_samples), 
         np.mean(hybrid_samples), 
 
         stats.shapiro(ensemble_samples).pvalue, 
         stats.shapiro(hybrid_samples).pvalue, 
           
-        stats.mannwhitneyu(ensemble_samples, hybrid_samples).pvalue
+        stats.mannwhitneyu(ensemble_samples, hybrid_samples).pvalue,
+        
+        cohen_d(ensemble_samples, hybrid_samples)
         )
