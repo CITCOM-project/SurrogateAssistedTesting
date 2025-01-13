@@ -13,6 +13,9 @@ def cohen_d(x,y):
     dof = nx + ny - 2
     return (np.mean(x) - np.mean(y)) / np.sqrt(((nx-1)*np.std(x, ddof=1) ** 2 + (ny-1)*np.std(y, ddof=1) ** 2) / dof)
 
+def chi_square(observed, expected):
+    return pow((observed - expected), 2) / expected
+
 ensemble = []
 
 for trace in os.listdir("./outputs_ensemble"):
@@ -68,3 +71,24 @@ for idx, (e_dist, h_dist) in enumerate(distribution_pairs):
         
         cohen_d(ensemble_samples, hybrid_samples)
         )
+    
+print()
+
+for idx, (e_dist, h_dist) in enumerate(distribution_pairs):
+    found_e = len([x for x in e_dist if x == 1])
+    found_h = len([x for x in h_dist if x == 1])
+    
+    missed_e = 924 - found_e
+    missed_h = 924 - found_h
+    
+    total_found = found_e + found_h
+    total_missed = missed_e + missed_h
+    
+    overall_total = total_found + total_missed
+    
+    found_expected = (total_found * 924) / overall_total
+    
+    print(idx * 10 + 10, "&",
+          found_e, "&",
+          found_h, "&",
+          chi_square(found_e, found_expected) + chi_square(found_h, found_expected), "\\\\")
