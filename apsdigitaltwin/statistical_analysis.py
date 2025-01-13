@@ -87,8 +87,9 @@ for idx, (e_dist, h_dist) in enumerate(distribution_pairs):
     overall_total = total_found + total_missed
     
     found_expected = (total_found * 924) / overall_total
+    missed_expected = (total_missed * 924) / overall_total
     
     print(idx * 10 + 10, "&",
           found_e, "&",
           found_h, "&",
-          chi_square(found_e, found_expected) + chi_square(found_h, found_expected), "\\\\")
+          "%.5f" % (chi_square(found_e, found_expected) + chi_square(found_h, found_expected) + chi_square(missed_e, missed_expected) + chi_square(missed_h, missed_expected)), "\\\\")
